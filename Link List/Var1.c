@@ -78,12 +78,14 @@ void insertPos(List *list, int data, int index)
 
 void deleteStart(List *list)
 {
-if (*list == NULL) { 
+ if (list->head == NULL) {
+        printf("List is empty\n");
         return;
     }
-    Node *temp = *list; 
-    *list = (*list)->next; 
-    free(temp);
+    Node *current = list->head;      
+    list->head = current->next;       
+    free(current);                    
+    list->count--; 
 }
 
 void deleteLast(List *list)
