@@ -10,7 +10,6 @@ List initialize();
 int insertPos(List *L, int data, int position);
 void deletePos(List *L, int position);
 int locate(List *L, int data);
-void insertSorted(List *L, int data);
 void display(List *L);
 
 int main()
@@ -30,9 +29,11 @@ int main()
 List initialize()
 {
     List L;
+    int i;
+
     L.count = 0;
 
-    for(int i = 0; i < size; i++)
+    for(i = 0; i < size; i++)
     {
         L.elem[i] = -1;
     }
@@ -42,89 +43,89 @@ List initialize()
 
 int insertPos(List *L, int data, int position)
 {
-    if (L->count >= size)
+    int i;
+    int success = 0;
+
+    if(L->count >= size)
     {
-        printf("Size is full\n");
-        return 0;
+        printf("Error: List is full\n");
+    }
+    else if(position < 0 || position > L->count)
+    {
+        printf("Error: Invalid position\n");
+    }
+    else
+    {
+        for(i = L->count; i > position; i--)
+        {
+            L->elem[i] = L->elem[i-1];
+        }
+
+        L->elem[position] = data;
+        L->count++;
+        success = 1;
     }
 
-    if (position < 0 || position > L->count)
-    {
-        printf("Invalid Position\n");
-        return 0;
-    }
-
-    for (int i = L->count; i > position; i--)
-    {
-        L->elem[i] = L->elem[i - 1];
-    }
-
-    L->elem[position] = data;
-    L->count++;
-
-    return 1;
+    return success;
 }
 
 void deletePos(List *L, int position)
 {
-    if (position < 0 || position >= L->count)
-    {
-        printf("Invalid Position\n");
-        return;
-    }
+    int i;
 
-    for (int i = position; i < L->count - 1; i++)
+    if(L->count == 0)
     {
-        L->elem[i] = L->elem[i + 1];
+        printf("Error: List is empty\n");
     }
+    else if(position < 0 || position >= L->count)
+    {
+        printf("Error: Invalid position\n");
+    }
+    else
+    {
+        for(i = position; i < L->count-1; i++)
+        {
+            L->elem[i] = L->elem[i+1];
+        }
 
-    L->count--;
+        L->count--;
+    }
 }
 
 int locate(List *L, int data)
 {
-    for (int i = 0; i < L->count; i++)
+    int i = 0;
+    int pos = -1;
+
+    while(i < L->count && pos == -1)
     {
-        if (L->elem[i] == data)
+        if(L->elem[i] == data)
         {
-            return i;
+            pos = i;
+        }
+        else
+        {
+            i++;
         }
     }
 
-    return -1;
-}
-
-void insertSorted(List *L, int data)
-{
-    int i;
-
-    if (L->count >= size)
-    {
-        printf("List Full\n");
-        return;
-    }
-
-    for(i = L->count - 1; i >= 0 && L->elem[i] > data; i--)
-    {
-        L->elem[i+1] = L->elem[i];
-    }
-
-    L->elem[i+1] = data;
-    L->count++;
+    return pos;
 }
 
 void display(List *L)
 {
-    if (L->count == 0)
-    {
-        printf("Empty\n");
-        return;
-    }
+    int i;
 
-    for (int i = 0; i < L->count; i++)
+    if(L->count == 0)
     {
-        printf("%d ", L->elem[i]);
+        printf("List is empty\n");
     }
-
-    printf("\n");
+    else
+    {
+        for(i = 0; i < L->count; i++)
+        {
+            printf("%d ", L->elem[i]);
+        }
+        printf("\n");
+    }
 }
